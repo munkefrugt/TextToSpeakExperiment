@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -21,8 +22,13 @@ public class MainActivity extends AppCompatActivity {
 
     // this is heavily inspired from. https://www.youtube.com/watch?v=sU38Yhux-3g
 
-    // 1,added
+
     TextToSpeech ttsObject;
+    int result;
+    //Initialize edit text , "et" for edit text.
+    EditText et;
+    // the text that is spoken
+    String text;
 
 
     @Override
@@ -31,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
           Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // saves the text that the user types into the text as type edit
+        // text still not extracted happens in method doSomething(View v)
+        et = (EditText) findViewById(R.id.editText);
 
         //  TextToSpeech(Context context, oninitListener ) // 'MainActivity.this'  is the context
         // remember context is the "assistant"
@@ -43,11 +53,14 @@ public class MainActivity extends AppCompatActivity {
                 if(status == TextToSpeech.SUCCESS)
                 {
                     // set language:
-                    ttsObject.setLanguage(Locale.UK);
+                    // returns a value to result.
+                    result = ttsObject.setLanguage(Locale.UK);
                 }
                 else // if its not working: prevents from crashing
                 {
-                    Toast.makeText(getApplicationContext(),"Feature not supported in your Device",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            "Feature not supported in your Device",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -68,14 +81,24 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.i(TAG,"Speak is clicked");
                 // is there missing data or language?
-                /*if()
-                {
 
+                if(result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA)
+                {
+                    Toast.makeText(getApplicationContext(),
+                            "Feature not supported in your Device",
+                            Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
+                    // extract text from et , from what the user typed
+                    text = et.getText().toString();
+                    Log.i(TAG,text);
+                    //ttsObject.speak(text, TextToSpeech.QUEUE_FLUSH, null );
 
-                }*/
+
+
+                    //ttsObject.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                }
                 break;
             // when stop speak is clicked
             case R.id.btnStopSpeaking:
