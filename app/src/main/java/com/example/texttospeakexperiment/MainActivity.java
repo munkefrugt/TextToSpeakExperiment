@@ -79,8 +79,9 @@ public class MainActivity extends AppCompatActivity {
             // when speak is clicked
             case R.id.btnSpeak:
 
-                Log.i(TAG,"Speak is clicked");
+                Log.i(TAG, "Speak is clicked");
                 // is there missing data or language?
+
 
                 if(result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA)
                 {
@@ -92,8 +93,10 @@ public class MainActivity extends AppCompatActivity {
                 {
                     // extract text from et , from what the user typed
                     text = et.getText().toString();
+                    //text = "hi you suck";
+                    ttsObject.speak(text, TextToSpeech.QUEUE_FLUSH, null );
                     Log.i(TAG,text);
-                    //ttsObject.speak(text, TextToSpeech.QUEUE_FLUSH, null );
+                    //
 
 
 
