@@ -6,14 +6,22 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Switch;
+import android.widget.Toast;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
+    String TAG = "info:";
 
-    // 1
+    // this is heavily inspired from. https://www.youtube.com/watch?v=sU38Yhux-3g
+
+    // 1,added
     TextToSpeech ttsObject;
 
 
@@ -24,10 +32,64 @@ public class MainActivity extends AppCompatActivity {
           Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       
+        //  TextToSpeech(Context context, oninitListener ) // 'MainActivity.this'  is the context
+        // remember context is the "assistant"
+        ttsObject = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener()
+        {
+            // it creates this by it self..
+            @Override
+            public void onInit(int status) {
+
+                if(status == TextToSpeech.SUCCESS)
+                {
+                    // set language:
+                    ttsObject.setLanguage(Locale.UK);
+                }
+                else // if its not working: prevents from crashing
+                {
+                    Toast.makeText(getApplicationContext(),"Feature not supported in your Device",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+
+    // when any button is clickeed this method will be executed.
+    // has to be public, we need accces from the sentence in the  content_main.xml file ->
+    // android:onClick="doSomething"
+    public void doSomething(View v)
+
+    {
+        switch (v.getId())
+        {
+            // when speak is clicked
+            case R.id.btnSpeak:
+
+                Log.i(TAG,"Speak is clicked");
+                // is there missing data or language?
+                /*if()
+                {
+
+                }
+                else
+                {
+
+                }*/
+                break;
+            // when stop speak is clicked
+            case R.id.btnStopSpeaking:
+                Log.i(TAG,"stop is clicked");
+                break;
+
+            default:
+                Log.i(TAG,"error");
+                break;
+        }
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
